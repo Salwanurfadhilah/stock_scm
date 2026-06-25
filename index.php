@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Adjustment (Scrap) Dashboard</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-sky-50/50 font-sans text-slate-700 flex h-screen overflow-hidden">
 
+    <!-- SIDEBAR -->
     <aside class="w-64 bg-white border-r border-sky-100 flex flex-col justify-between hidden md:flex">
         <div class="p-6">
             <div class="flex items-center gap-3 text-sky-600 font-bold text-xl tracking-wide uppercase mb-8">
@@ -31,11 +34,20 @@
                 </button>
             </nav>
         </div>
-        <div class="p-6 border-t border-sky-50 text-sm text-slate-400">
-            Log In: <strong>Supervisor Gudang</strong>
+        
+        <!-- FITUR BARU: ROLE SELECTOR -->
+        <div class="p-6 border-t border-sky-100 bg-sky-50/30">
+            <label class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block"><i class="fa-solid fa-id-badge mr-1"></i> Akses Login Saat Ini</label>
+            <select id="roleSelector" onchange="changeRole()" class="w-full bg-white border border-sky-200 text-sky-700 text-sm rounded-lg focus:ring-sky-500 focus:border-sky-500 block p-2.5 font-medium shadow-sm transition cursor-pointer">
+                <option value="Supervisor Gudang">Supervisor Gudang</option>
+                <option value="Project Manager">Project Manager</option>
+                <option value="Head of Operations">Head of Operations</option>
+                <option value="Business Controller">Business Controller</option>
+            </select>
         </div>
     </aside>
 
+    <!-- MAIN CONTENT AREA -->
     <main class="flex-1 flex flex-col overflow-y-auto relative">
         
         <header class="bg-white border-b border-sky-100 px-8 py-4 flex justify-between items-center sticky top-0 z-10">
@@ -44,6 +56,10 @@
                 <p id="page-subtitle" class="text-sm text-slate-400">Pantau dan kelola produk yang afkir/rusak secara real-time.</p>
             </div>
             <div class="flex items-center gap-4">
+                <div class="hidden md:block text-right mr-4 border-r border-sky-100 pr-4">
+                    <p class="text-xs text-slate-400">Selamat datang,</p>
+                    <p id="topbar-role" class="text-sm font-bold text-sky-700">Supervisor Gudang</p>
+                </div>
                 <button onclick="switchTab('input', document.querySelectorAll('.nav-item')[1])" class="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-lg font-medium text-sm shadow-sm flex items-center gap-2 transition">
                     <i class="fa-solid fa-plus"></i> Tambah Penyesuaian
                 </button>
@@ -52,6 +68,7 @@
 
         <div class="p-8 space-y-6">
             
+            <!-- HALAMAN 1: DASHBOARD -->
             <section id="dashboard" class="page-section block">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                     <div class="bg-white p-6 rounded-xl border border-sky-100 shadow-sm flex items-center justify-between">
@@ -103,7 +120,7 @@
                             <thead>
                                 <tr class="bg-sky-50/70 text-sky-900 font-semibold text-sm border-b border-sky-100">
                                     <th class="p-4 whitespace-nowrap">ID Transaksi</th>
-                                    <th class="p-4 whitespace-nowrap">Tanggal</th>
+                                    <th class="p-4 whitespace-nowrap">Tanggal & Pelapor</th>
                                     <th class="p-4 whitespace-nowrap">SKU / Nama Produk</th>
                                     <th class="p-4 text-center whitespace-nowrap">Jumlah</th>
                                     <th class="p-4 whitespace-nowrap">Status</th>
@@ -116,6 +133,7 @@
                 </div>
             </section>
 
+            <!-- HALAMAN 2: INPUT ADJUSTMENT -->
             <section id="input" class="page-section hidden">
                 <div class="bg-white rounded-xl border border-sky-100 shadow-sm p-6 max-w-3xl">
                     <h2 class="text-lg font-bold text-slate-800 mb-4">Form Laporan Barang Rusak (Scrap)</h2>
@@ -148,12 +166,13 @@
                 </div>
             </section>
 
+            <!-- HALAMAN 3: RIWAYAT SCRAP -->
             <section id="riwayat" class="page-section hidden">
                 <div class="bg-white rounded-xl border border-sky-100 shadow-sm overflow-hidden">
                     <div class="p-6 border-b border-sky-50 flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-bold text-slate-800">Semua Riwayat Scrap</h2>
-                            <p class="text-sm text-slate-400">Manajemen (Update & Delete) data scrap.</p>
+                            <p class="text-sm text-slate-400">Manajemen persetujuan dan penghapusan data.</p>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -161,7 +180,7 @@
                             <thead>
                                 <tr class="bg-sky-50/70 text-sky-900 font-semibold text-sm border-b border-sky-100">
                                     <th class="p-4 whitespace-nowrap">ID Transaksi</th>
-                                    <th class="p-4 whitespace-nowrap">Tanggal</th>
+                                    <th class="p-4 whitespace-nowrap">Tanggal & Pelapor</th>
                                     <th class="p-4 whitespace-nowrap">SKU Produk</th>
                                     <th class="p-4 text-center whitespace-nowrap">Jumlah</th>
                                     <th class="p-4 whitespace-nowrap">Alasan</th>
@@ -176,6 +195,7 @@
                 </div>
             </section>
 
+            <!-- HALAMAN 4: STOK UTAMA -->
             <section id="stok" class="page-section hidden">
                 <div class="bg-white rounded-xl border border-sky-100 shadow-sm p-12 text-center">
                     <div class="w-16 h-16 bg-sky-50 text-sky-400 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
@@ -189,33 +209,45 @@
         </div>
     </main>
 
+    <!-- SCRIPT LOGIKA CRUD & ROLE MANAGEMENT -->
     <script>
-        // 1. INISIALISASI DATA LOCALSTORAGE
-        // Cek apakah ada data di localStorage, jika tidak, buat data dummy default
-        let dbName = 'scrapData_v1';
+        // 1. MANAJEMEN ROLE & INISIALISASI DATA
+        let dbName = 'scrapData_v2';
         let records = JSON.parse(localStorage.getItem(dbName));
+        let activeRole = localStorage.getItem('userRole') || 'Supervisor Gudang';
+
+        // Setel dropdown dan topbar sesuai role terakhir yang disimpan
+        document.getElementById('roleSelector').value = activeRole;
+        document.getElementById('topbar-role').innerText = activeRole;
 
         if (!records) {
             records = [
-                { id: generateID(), date: '25 Juni 2026', sku: 'BRG-ELC-009', qty: 45, reason: 'Cacat Produksi', status: 'Disetujui' },
-                { id: generateID(), date: '24 Juni 2026', sku: 'BRG-PAK-021', qty: 120, reason: 'Rusak saat pengiriman', status: 'Pending' }
+                { id: generateID(), date: '25 Juni 2026', createdBy: 'Project Manager', sku: 'BRG-ELC-009', qty: 45, reason: 'Cacat Produksi', status: 'Disetujui' },
+                { id: generateID(), date: '24 Juni 2026', createdBy: 'Supervisor Gudang', sku: 'BRG-PAK-021', qty: 120, reason: 'Rusak saat pengiriman', status: 'Pending' }
             ];
             saveData();
         }
 
-        // Fungsi Simpan ke Local Storage
         function saveData() {
             localStorage.setItem(dbName, JSON.stringify(records));
         }
 
-        // Fungsi membuat ID unik
         function generateID() {
-            return '#ADJ-' + Math.floor(1000 + Math.random() * 9000); // Format #ADJ-1234
+            return '#ADJ-' + Math.floor(1000 + Math.random() * 9000);
         }
 
-        // Fungsi format Rupiah untuk KPI
         function formatRupiah(angka) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
+
+        // FUNGSI GANTI ROLE
+        function changeRole() {
+            activeRole = document.getElementById('roleSelector').value;
+            localStorage.setItem('userRole', activeRole);
+            document.getElementById('topbar-role').innerText = activeRole;
+            // Tampilkan notifikasi agar user tahu role-nya berubah
+            alert(`Berhasil berganti akses menjadi: ${activeRole}`);
+            renderData();
         }
 
         // 2. READ: RENDER TABEL & KPI
@@ -229,25 +261,25 @@
             let totalItem = 0;
             let pendingDoc = 0;
 
-            // Render baris dari data array terbaru (di-reverse agar yang baru di atas)
             const reversedRecords = [...records].reverse();
 
             reversedRecords.forEach((item, index) => {
-                // Hitung KPI
                 totalItem += parseInt(item.qty);
                 if (item.status === 'Pending') pendingDoc += 1;
 
-                // Tentukan warna status
                 let statusBadge = item.status === 'Disetujui' 
                     ? `<span class="px-2 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">Disetujui</span>`
                     : `<span class="px-2 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-medium">Pending</span>`;
 
-                // A. Render untuk Dashboard (Sederhana)
-                if (index < 5) { // Tampilkan max 5 di dashboard
+                // Render Dashboard
+                if (index < 5) {
                     dashTbody.innerHTML += `
                         <tr class="hover:bg-sky-50/30 transition">
                             <td class="p-4 font-medium text-sky-700">${item.id}</td>
-                            <td class="p-4 text-slate-500">${item.date}</td>
+                            <td class="p-4">
+                                <span class="text-slate-600">${item.date}</span><br>
+                                <span class="text-[11px] font-medium text-sky-600 px-1.5 py-0.5 bg-sky-50 rounded">${item.createdBy || 'Unknown'}</span>
+                            </td>
                             <td class="p-4 font-medium text-slate-800">${item.sku}</td>
                             <td class="p-4 text-center font-semibold">${item.qty}</td>
                             <td class="p-4">${statusBadge}</td>
@@ -255,18 +287,21 @@
                     `;
                 }
 
-                // B. Render untuk Halaman Riwayat (Lengkap + Tombol CRUD)
+                // Render Riwayat
                 riwayatTbody.innerHTML += `
                     <tr class="hover:bg-sky-50/30 transition">
                         <td class="p-4 font-medium text-sky-700">${item.id}</td>
-                        <td class="p-4 text-slate-500">${item.date}</td>
+                        <td class="p-4 leading-tight">
+                            <span class="text-slate-600">${item.date}</span><br>
+                            <span class="text-[11px] font-medium text-sky-600 px-1.5 py-0.5 bg-sky-50 rounded mt-1 inline-block">${item.createdBy || 'Unknown'}</span>
+                        </td>
                         <td class="p-4 font-medium">${item.sku}</td>
                         <td class="p-4 text-center font-semibold">${item.qty}</td>
                         <td class="p-4 text-xs text-slate-500">${item.reason}</td>
                         <td class="p-4">${statusBadge}</td>
                         <td class="p-4 text-center">
                             ${item.status === 'Pending' 
-                                ? `<button onclick="updateStatus('${item.id}')" class="text-emerald-500 hover:text-emerald-700 mx-1 title="Setujui"><i class="fa-solid fa-check-circle"></i></button>`
+                                ? `<button onclick="updateStatus('${item.id}')" class="text-emerald-500 hover:text-emerald-700 mx-1" title="Setujui (Approval)"><i class="fa-solid fa-check-circle"></i></button>`
                                 : `<button disabled class="text-slate-300 mx-1"><i class="fa-solid fa-check-circle"></i></button>`
                             }
                             <button onclick="deleteData('${item.id}')" class="text-rose-400 hover:text-rose-600 mx-1" title="Hapus"><i class="fa-solid fa-trash"></i></button>
@@ -275,70 +310,73 @@
                 `;
             });
 
-            // Update Angka KPI Card
             document.getElementById('kpi-total').innerHTML = `${totalItem} <span class="text-sm font-normal text-slate-400">Unit</span>`;
             document.getElementById('kpi-pending').innerHTML = `${pendingDoc} <span class="text-sm font-normal text-slate-400">Dokumen</span>`;
-            
-            // Asumsi: 1 barang rusak kerugiannya rata-rata Rp 50.000 (Hanya untuk simulasi logika)
             document.getElementById('kpi-loss').innerText = formatRupiah(totalItem * 50000);
         }
 
         // 3. CREATE: FUNGSI SIMPAN DATA DARI FORM
         function createData(event) {
-            event.preventDefault(); // Cegah refresh
+            event.preventDefault(); 
             
-            // Ambil Value
             const sku = document.getElementById('form-sku').value;
             const qty = document.getElementById('form-qty').value;
             const reason = document.getElementById('form-reason').value;
-
-            // Ambil tanggal hari ini format lokal
             const today = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 
-            // Masukkan ke array
             records.push({
                 id: generateID(),
                 date: today,
+                createdBy: activeRole, // Menyimpan role pembuat dokumen
                 sku: sku,
                 qty: qty,
                 reason: reason,
-                status: 'Pending' // Default status
+                status: 'Pending' 
             });
 
-            saveData(); // Simpan ke localstorage
-            renderData(); // Refresh tampilan tabel dan KPI
+            saveData(); 
+            renderData(); 
 
-            event.target.reset(); // Kosongkan form
-            alert('Data penyesuaian stok (Scrap) berhasil ditambahkan!');
+            event.target.reset(); 
+            alert('Laporan berhasil disimpan oleh: ' + activeRole);
             
-            // Kembali ke Dashboard
             switchTab('dashboard', document.querySelectorAll('.nav-item')[0]);
         }
 
-        // 4. UPDATE: FUNGSI SETUJUI (Ubah status pending -> disetujui)
+        // 4. UPDATE: FUNGSI SETUJUI DENGAN VALIDASI ROLE
         function updateStatus(id) {
-            if(confirm('Setujui dokumen ' + id + ' ini?')) {
-                // Cari index datanya
+            // Validasi Role (Hanya level manajerial ke atas yang boleh approve)
+            if (activeRole !== 'Head of Operations' && activeRole !== 'Business Controller') {
+                alert('AKSES DITOLAK: Maaf, hanya "Head of Operations" atau "Business Controller" yang memiliki wewenang untuk menyetujui dokumen Scrap.');
+                return; // Batalkan proses
+            }
+
+            if(confirm('Apakah Anda yakin ingin menyetujui dokumen ' + id + '?')) {
                 const index = records.findIndex(item => item.id === id);
                 if(index !== -1) {
                     records[index].status = 'Disetujui';
                     saveData();
-                    renderData(); // Refresh UI
+                    renderData(); 
                 }
             }
         }
 
-        // 5. DELETE: FUNGSI HAPUS DATA
+        // 5. DELETE: FUNGSI HAPUS DATA DENGAN VALIDASI ROLE
         function deleteData(id) {
-            if(confirm('Apakah Anda yakin ingin menghapus data ' + id + '?')) {
-                // Filter data, buang data dengan id yang dipilih
+            // Validasi Role
+            if (activeRole !== 'Head of Operations' && activeRole !== 'Business Controller') {
+                alert('AKSES DITOLAK: Maaf, hak akses untuk menghapus data hanya dimiliki oleh "Head of Operations" dan "Business Controller".');
+                return; // Batalkan proses
+            }
+
+            if(confirm('Perhatian: Apakah Anda yakin ingin menghapus permanen data ' + id + '?')) {
                 records = records.filter(item => item.id !== id);
                 saveData();
-                renderData(); // Refresh UI
+                renderData(); 
             }
         }
 
-        // FUNGSI NAVIGASI TAB (UI)
+        // FUNGSI NAVIGASI TAB
         function switchTab(tabId, clickedElement) {
             const pages = document.querySelectorAll('.page-section');
             pages.forEach(page => {
@@ -372,7 +410,7 @@
                     break;
                 case 'riwayat':
                     titleElement.innerText = 'Riwayat Dokumen Scrap';
-                    subtitleElement.innerText = 'Manajemen (Update & Delete) data scrap historis.';
+                    subtitleElement.innerText = 'Manajemen persetujuan dan penghapusan data.';
                     break;
                 case 'stok':
                     titleElement.innerText = 'Data Stok Utama';
@@ -381,7 +419,7 @@
             }
         }
 
-        // Panggil fungsi render pertama kali saat halaman dimuat
+        // Panggil render saat pertama kali dimuat
         renderData();
     </script>
 </body>
